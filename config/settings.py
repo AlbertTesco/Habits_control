@@ -19,6 +19,7 @@ from dotenv import load_dotenv
 BASE_DIR = Path(__file__).resolve().parent.parent
 load_dotenv(BASE_DIR / '.env')
 
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
@@ -28,7 +29,7 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '0.0.0.0']
 
 # Application definition
 
@@ -93,10 +94,12 @@ WSGI_APPLICATION = 'config.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv('DB_NAME'),
-        'USER': os.getenv('DB_USER'),
-        'HOST': os.getenv('DB_HOST'),
-        'PASSWORD': os.getenv('DB_PASSWORD')
+        'NAME': os.getenv('POSTGRES_DB'),
+        'USER': os.getenv('POSTGRES_USER'),
+        'HOST': 'pgdb',
+        # 'HOST': 'localhost',
+        'PASSWORD': os.getenv('POSTGRES_PASSWORD'),
+        'PORT': '5432',
     }
 }
 
@@ -170,8 +173,19 @@ CSRF_TRUSTED_ORIGINS = [
 ]
 
 # Celery settings
-CELERY_BROKER_URL = 'redis://localhost:6379'
-CELERY_RESULT_BACKEND = 'redis://localhost:6379'
+# CELERY_BROKER_URL = 'redis://localhost:6379'
+# CELERY_RESULT_BACKEND = 'redis://localhost:6379'
+# CELERY_TIMEZONE = 'UTC'
+# CELERY_BEAT_SCHEDULE = {
+#     'task-name': {
+#         'task': 'habits.tasks.task_send_notification',
+#         'schedule': timedelta(minutes=1),
+#     },
+# }
+
+# Celery settings
+CELERY_BROKER_URL = 'redis://redis:6379/0'
+CELERY_RESULT_BACKEND = 'redis://redis:6379/0'
 CELERY_TIMEZONE = 'UTC'
 CELERY_BEAT_SCHEDULE = {
     'task-name': {
@@ -179,3 +193,4 @@ CELERY_BEAT_SCHEDULE = {
         'schedule': timedelta(minutes=1),
     },
 }
+
