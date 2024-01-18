@@ -4,16 +4,12 @@ services:
   #Django
   web:
     build: .
-    command: python manage.py runserver 0.0.0.0:8000
-    volumes:
-      - .:/app
+    command: sh -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
     ports:
       - "8000:8000"
     depends_on:
       - pgdb
-      - redis
-      - celery_beat
-      - celery_worker
+
 
   # PostgreSQL
   pgdb:
@@ -24,6 +20,11 @@ services:
       - "5433:5432"
     volumes:
       - ./pddata:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD", "pg_isready", "-q", "-d", "postgres", "-U", "postgres" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   # Redis
   redis:
@@ -35,12 +36,12 @@ services:
   celery_beat:
     build: .
     command: celery -A config beat -l info -S django
-    volumes:
-      - .:/app
+    depends_on:
+      - redis
 
   # Celery worker
   celery_worker:
     build: .
     command: celery -A config worker -l INFO
-    volumes:
-      - .:/app
+    depends_on:
+      - redis

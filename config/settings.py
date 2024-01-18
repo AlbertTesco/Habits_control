@@ -173,19 +173,8 @@ CSRF_TRUSTED_ORIGINS = [
 ]
 
 # Celery settings
-# CELERY_BROKER_URL = 'redis://localhost:6379'
-# CELERY_RESULT_BACKEND = 'redis://localhost:6379'
-# CELERY_TIMEZONE = 'UTC'
-# CELERY_BEAT_SCHEDULE = {
-#     'task-name': {
-#         'task': 'habits.tasks.task_send_notification',
-#         'schedule': timedelta(minutes=1),
-#     },
-# }
-
-# Celery settings
-CELERY_BROKER_URL = 'redis://redis:6379/0'
-CELERY_RESULT_BACKEND = 'redis://redis:6379/0'
+CELERY_BROKER_URL = 'redis://habit_control_redis_1:6379/0'
+CELERY_RESULT_BACKEND = 'redis://habit_control_redis_1:6379/0'
 CELERY_TIMEZONE = 'UTC'
 CELERY_BEAT_SCHEDULE = {
     'task-name': {
